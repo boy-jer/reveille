@@ -7,12 +7,6 @@
     <th>State</th>
   </tr>
   {{#each service in controller}}
-    <tr>
-      <td>{{service.id}}</td>
-      <td>
-        {{#linkTo 'services.show' service}}{{service.name}}{{/linkTo}}
-      </td>
-      <td>{{service.state}}</td>
-    </tr>
+    {{view Reveille.ServiceView contentBinding='service'}}
   {{/each}}
 </table>

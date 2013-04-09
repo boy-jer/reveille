@@ -1,5 +1,7 @@
+Reveille.Adapter = DS.RESTAdapter.extend
+  namespace: 'api'
+  bulkCommit: false
+
 Reveille.Store = DS.Store.extend
   revision: 12
-  adapter: DS.RESTAdapter.create
-    namespace: 'api'
-    bulkCommit: false
+  adapter: Reveille.Adapter.create()

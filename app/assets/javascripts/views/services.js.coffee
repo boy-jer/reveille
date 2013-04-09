@@ -1,0 +1,1 @@
+# Reveille.ServicesView = Ember.View.extend

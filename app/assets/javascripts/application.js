@@ -23,4 +23,6 @@
 //= require_self
 //= require reveille
 
-Reveille = Ember.Application.create();
+Reveille = Ember.Application.create({
+  LOG_TRANSITIONS: true
+});

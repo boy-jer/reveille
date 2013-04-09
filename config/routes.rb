@@ -19,6 +19,11 @@ Reveille::Application.routes.draw do
           put 'disable'
         end
       end
+
+      resources :escalation_policies
+      resources :schedules do
+        resources :schedule_layers, path: :layers
+      end
     end
   end
 
@@ -39,7 +44,9 @@ Reveille::Application.routes.draw do
   
   # get 'dashboard' => 'dashboard#index'
 
+  # root to: 'ember#start'
+  # match '/*path' => 'ember#start'
   root to: 'application#index'
-  get '/*path' => 'application#index'
+  match '/*path' => 'application#index'
   # root to: 'home#index'
 end
