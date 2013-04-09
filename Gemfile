@@ -32,6 +32,10 @@ gem 'acts_as_tenant'
 gem 'active_attr'
 gem 'tabletastic'
 
+# gem 'barber', github: 'tchak/barber'
+# gem 'handlebars-source', github: 'wycats/handlebars.js'
+gem 'ember-rails' #, github: 'emberjs/ember-rails'
+
 gem 'apipie-rails'
 
 # Service

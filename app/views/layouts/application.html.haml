@@ -18,38 +18,4 @@
 
 
   %body
-    #wrap
-      = render 'shared/header'
-      
-      .container
-        .row
-          %header.span12
-            - if content_for? :header
-              .page-header
-                = yield :header
-            - else
-
-        .row
-          .span12
-            = bootstrap_flash
-        .row
-          - if content_for? :sidebar
-            %article.span9
-              = yield
-            %aside.span3
-              = yield :sidebar if content_for?(:sidebar)
-          - else
-            %article.span12
-              = yield
-
-      #push
-        /--//--
-
-    %footer
-      .container
-        %p.muted.credit Copyright &copy; 2013 Applied Awesome LLC.
-    /
-      Javascripts
-      \==================================================
-    / Placed at the end of the document so the pages load faster
     = javascript_include_tag "application"

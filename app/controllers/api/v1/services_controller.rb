@@ -12,7 +12,7 @@ class Api::V1::ServicesController < Api::V1::BaseController
 
   api :GET, '/services', 'List all services'
   def index
-    @services = Service.all
+    @services = current_account.services
 
     respond_with @services
   end
@@ -20,7 +20,7 @@ class Api::V1::ServicesController < Api::V1::BaseController
   api :GET, '/services/:id', 'Show a service'
   param :id, String, desc: 'The incident id', required: true
   def show
-    @service = Service.find_by_uuid(params[:id])
+    @service = current_account.services.where(uuid: params[:id]).first
 
     respond_with @service
   end
@@ -28,8 +28,8 @@ class Api::V1::ServicesController < Api::V1::BaseController
   api :POST, '/services', 'Create a service'
   param_group :service
   def create
-    @escalation_policy = EscalationPolicy.find_by_uuid(params.delete(:escalation_policy_id))
-    @service = Service.new(service_params.merge(:escalation_policy => @escalation_policy))
+    @escalation_policy = current_account.escalation_policies.where(uuid: params.delete(:escalation_policy_id)).first
+    @service = current_account.services.new(service_params.merge(:escalation_policy => @escalation_policy))
     @service.save
 
     respond_with @service
@@ -39,21 +39,21 @@ class Api::V1::ServicesController < Api::V1::BaseController
   param :id, String, desc: 'the id of the service', required: true
   param_group :service
   def update
-    @service = Service.find_by_uuid(params[:id])
+    @service = current_account.services.where(uuid: params[:id]).first
     @service.update_attributes(service_params)
 
     respond_with @service, json: @service
   end
 
   def enable
-    @service = Service.find_by_uuid(params[:id])
+    @service = current_account.services.where(uuid: params[:id]).first
     @service.enable && hound_action(@service, 'enable')
 
     respond_with @service, json: @service
   end
 
   def disable
-    @service = Service.find_by_uuid(params[:id])
+    @service = current_account.services.where(uuid: params[:id]).first
     @service.disable && hound_action(@service, 'disable')
 
     respond_with @service, json: @service
@@ -62,7 +62,7 @@ class Api::V1::ServicesController < Api::V1::BaseController
   api :DELETE, '/services/:id', 'Delete a service'
   param :id, String, desc: 'the id of the service', required: true
   def destroy
-    @service = Service.find_by_uuid(params[:id])
+    @service = current_account.services.where(uuid: params[:id]).first
     @service.destroy
 
     respond_with @service
@@ -74,19 +74,3 @@ class Api::V1::ServicesController < Api::V1::BaseController
     params.permit(:name, :auto_resolve_timeout, :acknowledge_timeout)
   end
 end
-
-# == Schema Information
-#
-# Table name: services
-#
-#  id                   :integer          not null, primary key
-#  name                 :string(255)
-#  auto_resolve_timeout :integer
-#  acknowledge_timeout  :integer
-#  state                :string(255)
-#  uuid                 :string(255)
-#  authentication_token :string(255)
-#  escalation_policy_id :integer
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#
